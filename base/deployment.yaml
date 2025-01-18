@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: habesha-hub
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: habesha-hub
+  template:
+    metadata:
+      labels:
+        app: habesha-hub
+    spec:
+      containers:
+        - name: habesha-hub
+          image: aklilu13/habesha-hub:latest
+          ports:
+            - containerPort: 80
