@@ -14,7 +14,7 @@ patches:
   - patch: |-
       - op: replace
         path: /spec/rules/0/host
-        value: dev.ethiopiandemena.com
+        value: habesha-hub.com
     target:
       kind: Ingress
       name: habesha-hub

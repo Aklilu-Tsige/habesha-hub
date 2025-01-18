@@ -9,10 +9,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - ethiopiandemena.com
+        - habesha-hub.com
       secretName: habesha-hub-tls
   rules:
-    - host: ethiopiandemena.com
+    - host: habesha-hub.com
       http:
         paths:
           - path: /
