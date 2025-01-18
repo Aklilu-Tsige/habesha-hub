@@ -16,4 +16,4 @@ spec:
         - name: habesha-hub
           image: aklilu13/habesha-hub:latest
           ports:
-            - containerPort: 80
+            - containerPort: 3000
