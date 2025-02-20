@@ -7,7 +7,7 @@ patches:
   - patch: |-
       - op: replace
         path: /spec/template/spec/containers/0/image
-        value: aklilu13/habesha-hub:0.1.6
+        value: aklilu13/habesha-hub:0.1.7
     target:
       kind: Deployment
       name: habesha-hub
