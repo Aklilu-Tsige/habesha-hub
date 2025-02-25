@@ -1,0 +1,29 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: habesha-hub-test
+
+resources:
+  - ../../base
+
+namePrefix: test-
+
+commonLabels:
+  env: test
+
+replicas:
+  - name: events-backend
+    count: 1
+
+patchesStrategicMerge:
+  - deployment-patch.yaml
+  - configmap-patch.yaml
+
+secretGenerator:
+  - name: events-backend-secrets
+    type: Opaque
+    literals:
+      - DB_PASSWORD=${DB_PASSWORD}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}

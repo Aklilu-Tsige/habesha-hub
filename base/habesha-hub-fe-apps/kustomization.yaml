@@ -1,0 +1,10 @@
+# base/habesha-hub-fe-apps/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - user-app/deployment.yaml
+  - user-app/service.yaml
+
+commonLabels:
+  app.kubernetes.io/component: frontend

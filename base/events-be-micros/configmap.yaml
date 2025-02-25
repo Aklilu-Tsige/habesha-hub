@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+data:
+  application.yaml: |
+    spring:
+      datasource:
+        url: jdbc:postgresql://postgres-service:5432/events_db
+        username: postgres
+      jpa:
+        hibernate:
+          ddl-auto: update
+        properties:
+          hibernate:
+            dialect: org.hibernate.dialect.PostgreSQLDialect
+      mail:
+        host: smtp.mail.us-east-1.awsapps.com
+        port: 465
+        username: info@habesha-hub.com
+    
+    app:
+      default:
+        language: en
+    
+    aws:
+      s3:
+        region: eu-central-2
+        endpoint: https://s3.eu-central-2.amazonaws.com
