@@ -1,53 +1,25 @@
+# overlays/dev/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 namespace: dev
 
-bases:
+resources:
   - ../../base
 
-patches:
-  - patch: |-
-      - op: replace
-        path: /spec/template/spec/containers/0/image
-        value: aklilu13/habesha-hub:0.1.7
-    target:
-      kind: Deployment
-      name: habesha-hub
+# Include all patch files
+patchesStrategicMerge:
+  - patches/frontend-deployment.yaml
+  - patches/backend-deployment.yaml
+  - patches/backend-configmap.yaml
+  - patches/ingress.yaml
 
-  - patch: |-
-      - op: replace
-        path: /spec/rules/0/host
-        value: habesha-hub.com
-    target:
-      kind: Ingress
-      name: habesha-hub
-
-  # Add events-backend patch
-  - patch: |-
-      - op: replace
-        path: /spec/template/spec/containers/0/image
-        value: aklilu13/events-backend:dev-latest
-    target:
-      kind: Deployment
-      name: events-backend
-
-  # Configure events-backend database connection
-  - patch: |-
-      - op: replace
-        path: /data/application.yaml
-        value: |
-          spring:
-            datasource:
-              url: jdbc:postgresql://postgres-service.dev.svc.cluster.local:5432/events_db
-              username: postgres
-            jpa:
-              hibernate:
-                ddl-auto: update
-            mail:
-              host: smtp.mail.us-east-1.awsapps.com
-              port: 465
-              username: info@habesha-hub.com
-    target:
-      kind: ConfigMap
-      name: events-backend-config
+# Secret generation
+secretGenerator:
+  - name: events-backend-secrets
+    type: Opaque
+    literals:
+      - DB_PASSWORD=cG9zdGdyZXM=
+      - MAIL_PASSWORD=VHR2ZlFsZjdVaENGZ0tYb05Kc0dA
+      - AWS_ACCESS_KEY_ID=L3I2dS9vTGM5U0JTVlhZYm1Xc0xyU2xGT3BkRzlXMTF4MlN3Vno5aA==
+      - AWS_SECRET_ACCESS_KEY=QUtJQVZDSUdPUDJYRFFPNkIyTTY=

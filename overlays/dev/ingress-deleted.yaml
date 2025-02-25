@@ -1,0 +1,24 @@
+## overlays/dev/ingress-deleted.yaml
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: habesha-hub
+#  annotations:
+#    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+#    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+#spec:
+#  tls:
+#    - hosts:
+#        - habesha-hub.com
+#      secretName: habesha-hub-tls
+#  rules:
+#    - host: habesha-hub.com
+#      http:
+#        paths:
+#          - pathType: Prefix
+#            path: /
+#            backend:
+#              service:
+#                name: habesha-hub
+#                port:
+#                  number: 80
