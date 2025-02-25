@@ -1,8 +1,11 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+
 namespace: dev
+
 bases:
   - ../../base
+
 patches:
   - patch: |-
       - op: replace
@@ -11,6 +14,7 @@ patches:
     target:
       kind: Deployment
       name: habesha-hub
+
   - patch: |-
       - op: replace
         path: /spec/rules/0/host
@@ -18,3 +22,32 @@ patches:
     target:
       kind: Ingress
       name: habesha-hub
+
+  # Add events-backend patch
+  - patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/image
+        value: aklilu13/events-backend:dev-latest
+    target:
+      kind: Deployment
+      name: events-backend
+
+  # Configure events-backend database connection
+  - patch: |-
+      - op: replace
+        path: /data/application.yaml
+        value: |
+          spring:
+            datasource:
+              url: jdbc:postgresql://postgres-service.dev.svc.cluster.local:5432/events_db
+              username: postgres
+            jpa:
+              hibernate:
+                ddl-auto: update
+            mail:
+              host: smtp.mail.us-east-1.awsapps.com
+              port: 465
+              username: info@habesha-hub.com
+    target:
+      kind: ConfigMap
+      name: events-backend-config
