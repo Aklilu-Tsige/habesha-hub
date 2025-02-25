@@ -1,7 +1,8 @@
+# base/events-backend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
+  name: events-backend
 spec:
   replicas: 1
   selector:
@@ -14,7 +15,7 @@ spec:
     spec:
       containers:
         - name: events-backend
-          image: aklilu13/events-backend:latest
+          image: aklilu13/events-backend:base
           ports:
             - containerPort: 8080
           env:
@@ -23,46 +24,12 @@ spec:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: backend-secrets
+                  name: events-backend-secrets
                   key: DB_PASSWORD
-            - name: MAIL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secrets
-                  key: MAIL_PASSWORD
-            - name: AWS_ACCESS_KEY_ID
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secrets
-                  key: AWS_ACCESS_KEY_ID
-            - name: AWS_SECRET_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secrets
-                  key: AWS_SECRET_ACCESS_KEY
           volumeMounts:
             - name: config-volume
               mountPath: /config
-          resources:
-            requests:
-              memory: "512Mi"
-              cpu: "250m"
-            limits:
-              memory: "1Gi"
-              cpu: "500m"
-          readinessProbe:
-            httpGet:
-              path: /actuator/health
-              port: 8080
-            initialDelaySeconds: 30
-            periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /actuator/health
-              port: 8080
-            initialDelaySeconds: 60
-            periodSeconds: 15
       volumes:
         - name: config-volume
           configMap:
-            name: backend-config
+            name: events-backend-config
